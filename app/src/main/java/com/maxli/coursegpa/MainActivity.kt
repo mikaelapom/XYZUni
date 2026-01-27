@@ -1,3 +1,5 @@
+//Times New Roman
+//Blue #97cdec || Yellow #fbe475 || White #ffffff
 package com.maxli.coursegpa
 
 import android.os.Bundle
@@ -209,11 +211,11 @@ fun MainScreen(
 
             Button(onClick = {
 
-                val gpa = calculateGPA2()
+                val gpa = calculateGPA2(allCourses)
                 // Display the calculated GPA - Implement the display logic as needed
 //                    Toast.makeText(this, "GPA: $gpa", Toast.LENGTH_LONG).show()
                 println("GPA is: $gpa")
-                calculatedGPA = (-4.0) * Random.nextFloat()
+                calculatedGPA = gpa
 
             }) {
                 Text("GPA")
@@ -246,17 +248,12 @@ fun MainScreen(
 }
 
 // GPA calculation functionality
-private fun calculateGPA2(): Double {
+private fun calculateGPA2(allCourses: List<Course>): Double {
     // Dummy data for illustration. Replace with actual data retrieval and calculation logic
-    val courses = listOf(
-        Triple("Course1", 3, "A"), // CourseName, CreditHour, LetterGrade
-        Triple("Course2", 4, "B"),
-        Triple("Course3", 2, "A")
-    )
 
-    val gradePoints = mapOf("A" to 4.0, "B" to 3.0, "C" to 2.0, "D" to 1.0, "F" to 0.0)
-    val totalCreditHours = courses.sumOf { it.second }
-    val totalPoints = courses.sumOf { it.second * (gradePoints[it.third] ?: 0.0) }
+    val gradePoints = mapOf("A" to 4.0, "B" to 3.0, "C" to 2.0, "D" to 1.0, "F" to 0.0,"a" to 4.0, "b" to 3.0, "c" to 2.0, "d" to 1.0, "f" to 0.0)
+    val totalCreditHours = allCourses.sumOf { it.creditHour }
+    val totalPoints = allCourses.sumOf { it.creditHour * (gradePoints[it.letterGrade] ?: 0.0) }
 
     return if (totalCreditHours > 0) totalPoints / totalCreditHours else 0.0
 }
