@@ -184,15 +184,17 @@ fun MainScreen(
                 searching = true
                 viewModel.findCourse(courseName)
             }) {
-                Text("Sch")
+                Text("Search")
             }
 
             Button(onClick = { //for deleting, delete course in the viewmodel
                 searching = false
                 viewModel.deleteCourse(courseName)
+
             }) {
                 Text("Del")
             }
+            calculatedGPA = calculateGPA2(allCourses)
 
             Button(onClick = { //for clearing the entries, set space to be empty
                 searching = false
@@ -202,26 +204,24 @@ fun MainScreen(
 //                modifier = Modifier.size(width = 80.dp, height = 50.dp)
 
             ) {
-                Text("Clr")
+                Text("Clear")
             }
 
             Button(onClick = {
 
                 val gpa = calculateGPA2(allCourses)
-                // Display the calculated GPA - Implement the display logic as needed
-//                    Toast.makeText(this, "GPA: $gpa", Toast.LENGTH_LONG).show()
-                println("GPA is: $gpa")
                 calculatedGPA = gpa
 
-            }) {
+            })
+            {
                 Text("GPA")
             }
         }
 
         Row {
             Spacer(modifier = Modifier.weight(1f))
-            Text("GPA: $calculatedGPA")
-
+            //Text("GPA: ($calculatedGPA)")
+            Text("GPA: %.2f".format(calculatedGPA))
         }
 
         //creates scrollable lazy loading column
