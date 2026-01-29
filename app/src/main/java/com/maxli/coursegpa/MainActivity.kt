@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let {
-                        val viewModel: MainViewModel = viewModel( //create a viewmodel with mainViewModelFactpry
+                        val viewModel: MainViewModel = viewModel(
                             it,
                             "MainViewModel",
                             MainViewModelFactory(
@@ -112,7 +112,7 @@ fun MainScreen(
     }
 
     var calculatedGPA by remember {
-        mutableDoubleStateOf(-1.0) //default value
+        mutableDoubleStateOf(-1.0)
     }
 
     var searching by remember { mutableStateOf(false) }
@@ -132,7 +132,7 @@ fun MainScreen(
 
     //use column to create text fields
     Column(
-        horizontalAlignment = CenterHorizontally, //sets alignment to be stacked
+        horizontalAlignment = CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -165,7 +165,7 @@ fun MainScreen(
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            Button(onClick = { //"add" button, if there is something in courseCreditHour field then add the details into the space below
+            Button(onClick = {
                 if (courseCreditHour.isNotEmpty()) {
                     viewModel.insertCourse(
                         Course(
@@ -180,14 +180,14 @@ fun MainScreen(
                 Text("Add")
             }
 
-            Button(onClick = { //for search button, find the course in the viewmodel
+            Button(onClick = {
                 searching = true
                 viewModel.findCourse(courseName)
             }) {
                 Text("Search")
             }
 
-            Button(onClick = { //for deleting, delete course in the viewmodel
+            Button(onClick = {
                 searching = false
                 viewModel.deleteCourse(courseName)
 
@@ -196,7 +196,7 @@ fun MainScreen(
             }
             calculatedGPA = calculateGPA2(allCourses)
 
-            Button(onClick = { //for clearing the entries, set space to be empty
+            Button(onClick = {
                 searching = false
                 courseName = ""
                 courseCreditHour = ""
@@ -223,8 +223,6 @@ fun MainScreen(
             //Text("GPA: ($calculatedGPA)")
             Text("GPA: %.2f".format(calculatedGPA))
         }
-
-        //creates scrollable lazy loading column
         LazyColumn(
             Modifier
                 .fillMaxWidth()
@@ -256,8 +254,6 @@ private fun calculateGPA2(allCourses: List<Course>): Double {
     return if (totalCreditHours > 0) totalPoints / totalCreditHours else 0.0
 }
 
-
-//sets up the title row table headers
 @Composable
 fun TitleRow(head1: String, head2: String, head3: String, head4: String) {
     Row(
@@ -279,7 +275,6 @@ fun TitleRow(head1: String, head2: String, head3: String, head4: String) {
     }
 }
 
-//adds styling and content for each course entry
 @Composable
 fun CourseRow(id: Int, name: String, creditHour: Int, letterGrade: String) {
     Row(
