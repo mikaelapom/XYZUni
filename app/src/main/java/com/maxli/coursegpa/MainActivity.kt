@@ -2,6 +2,8 @@
 //Blue #97cdec || Yellow #fbe475 || White #ffffff
 package com.maxli.coursegpa
 
+
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.app.Application
+import androidx.compose.foundation.border
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.compose.ui.platform.LocalContext
@@ -32,9 +35,21 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.livedata.observeAsState
-import kotlin.random.Random
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+
 
 import com.maxli.coursegpa.ui.theme.CourseTheme
+
+
+val TimesNewRoman = FontFamily(
+Font(R.font.times, FontWeight.Normal),
+Font(R.font.times, FontWeight.Bold),
+Font(R.font.times, FontWeight.Normal, FontStyle.Italic),
+Font(R.font.times, FontWeight.Bold, FontStyle.Italic)
+)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,40 +77,65 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    // Adding the button to your layout - Adapt this to your layout configuration
-    // For example, if you have a LinearLayout, you can add the button to it
-    // val layout: LinearLayout = findViewById(R.id.your_layout_id)
-    // layout.addView(gpaButton)
-    // GPA calculation function
-//        private fun calculateGPA(): Double {
-//            // Retrieve courses data from database - Replace with actual data retrieval
-//            val courses = listOf(
-//                Triple("Course1", 3, "A"), // Example data: CourseName, CreditHour, LetterGrade
-//                Triple("Course2", 4, "B"),
-//                Triple("Course3", 2, "C")
-//            )
-//            val gradePoints = mapOf("A" to 4.0, "B" to 3.0, "C" to 2.0, "D" to 1.0, "F" to 0.0)
-//            val totalCreditHours = courses.sumOf { it.second }
-//            val totalPoints = courses.sumOf { it.second * (gradePoints[it.third] ?: 0.0) }
-//
-//            return if (totalCreditHours > 0) totalPoints / totalCreditHours else 0.0
-//        }
-
 }
 
 //initial screen setup, calls the main screen with the right data
+
+
+@Composable
+fun TopBanner() {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .background(Color(0xFFFBE475))
+            , contentAlignment = Alignment.Center
+        )
+        {
+            val timesNewRomanStyle = TextStyle(fontFamily = TimesNewRoman,
+            fontSize = 35.sp,
+            color = Color(0xFF1A2C57))
+
+            Text(text = "Smith College Northampton",
+                style = timesNewRomanStyle)
+        }
+    }
+}
+
+@Composable
+fun SecondBanner() {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .background(Color(0xFFFBE475))
+            , contentAlignment = Alignment.Center
+        )
+        {
+            val timesNewRomanStyle = TextStyle(fontFamily = TimesNewRoman,
+                fontSize = 25.sp,
+                color = Color(0xFF1A2C57))
+
+            Text(text = "Class Overview and GPA",
+                style = timesNewRomanStyle)
+        }
+    }
+}
 @Composable
 fun ScreenSetup(viewModel: MainViewModel) {
     val allCourses by viewModel.allCourses.observeAsState(listOf())
     val searchResults by viewModel.searchResults.observeAsState(listOf())
-
-    MainScreen(
-        allCourses = allCourses,
-        searchResults = searchResults,
-        viewModel = viewModel
-    )
-
+    Column {
+        TopBanner()
+        SecondBanner()
+        MainScreen(
+            allCourses = allCourses,
+            searchResults = searchResults,
+            viewModel = viewModel
+        )
+    }
 }
 
 //main ui with the buttons, text field, and list of courses
@@ -140,21 +180,24 @@ fun MainScreen(
             title = "Course Name",
             textState = courseName,
             onTextChange = onCourseTextChange,
-            keyboardType = KeyboardType.Text
+            keyboardType = KeyboardType.Text,
+            Modifier.border(width = 0.5.dp, Color(0xFF1A2C57))
         )
 
         CustomTextField(
             title = "Credit Hour",
             textState = courseCreditHour,
             onTextChange = onCreditHourTextChange,
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            Modifier.border(width = 0.5.dp, Color(0xFF1A2C57))
         )
 
         CustomTextField(
             title = "Letter Grade",
             textState = letterGrade,
             onTextChange = onLetterGradeTextChange,
-            keyboardType = KeyboardType.Text
+            keyboardType = KeyboardType.Text,
+            Modifier.border(width = 0.5.dp, Color(0xFF1A2C57))
         )
 
 
@@ -163,9 +206,10 @@ fun MainScreen(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(0.dp) //was 10.dp
         ) {
-            Button(onClick = {
+            Button(
+                onClick = {
                 if (courseCreditHour.isNotEmpty()) {
                     viewModel.insertCourse(
                         Course(
@@ -176,14 +220,16 @@ fun MainScreen(
                     )
                     searching = false
                 }
-            }) {
+            }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97CDEC),contentColor = Color(0xFF1A2C57)) //0xFF97CDEC blue, 0xFFFBE475 yellow
+            ) {
                 Text("Add")
             }
 
             Button(onClick = {
                 searching = true
                 viewModel.findCourse(courseName)
-            }) {
+            }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97CDEC),contentColor = Color(0xFF1A2C57))
+            ) {
                 Text("Search")
             }
 
@@ -191,7 +237,8 @@ fun MainScreen(
                 searching = false
                 viewModel.deleteCourse(courseName)
 
-            }) {
+            }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97CDEC),contentColor = Color(0xFF1A2C57))
+            ) {
                 Text("Del")
             }
             calculatedGPA = calculateGPA2(allCourses)
@@ -201,9 +248,7 @@ fun MainScreen(
                 courseName = ""
                 courseCreditHour = ""
                 letterGrade = ""
-            }// ,
-//                modifier = Modifier.size(width = 80.dp, height = 50.dp)
-
+            }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97CDEC),contentColor = Color(0xFF1A2C57))
             ) {
                 Text("Clear")
             }
@@ -213,32 +258,33 @@ fun MainScreen(
                 val gpa = calculateGPA2(allCourses)
                 calculatedGPA = gpa
 
-            })
-            {
+            }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF97CDEC),contentColor = Color(0xFF1A2C57))
+            ) {
                 Text("GPA")
             }
         }
 
-        Row {
-            Spacer(modifier = Modifier.weight(1f))
-            //Text("GPA: ($calculatedGPA)")
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+        ) {
             Text("GPA: %.2f".format(calculatedGPA))
         }
+
         LazyColumn(
-            Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
         ) {
             val list = if (searching) searchResults else allCourses
 
             item {
-                TitleRow(head1 = "ID", head2 = "Course", head3 = "CreditHour", head4 = "LetterGrade")
+                TitleRow(head1 = "ID", head2 = "Course", head3 = "Credit Hour", head4 = "Letter Grade",)
             }
 
             items(list) { course ->
-                CourseRow(id = course.id, name = course.courseName,
+                CourseRow(
+                    id = course.id,
+                    name = course.courseName,
                     creditHour = course.creditHour,
-                    letterGrade = course.letterGrade)
+                    letterGrade = course.letterGrade
+                )
             }
         }
     }
@@ -259,19 +305,25 @@ private fun calculateGPA2(allCourses: List<Course>): Double {
 fun TitleRow(head1: String, head2: String, head3: String, head4: String) {
     Row(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.primary)
+            .background(Color(0xFFFBE475))
+            //.border(width = 0.5.dp, Color.Black)
             .fillMaxWidth()
             .padding(5.dp)
     ) {
-        Text(head1, color = Color.White,
+        val timesNewRomanStyle = TextStyle(fontFamily = TimesNewRoman,
+            fontSize = 18.sp,
+            color = Color(0xFF1A2C57)
+        )
+
+        Text(head1, style = timesNewRomanStyle,
             modifier = Modifier
                 .weight(0.1f))
-        Text(head2, color = Color.White,
+        Text(head2, style = timesNewRomanStyle,
             modifier = Modifier
                 .weight(0.2f))
-        Text(head3, color = Color.White,
+        Text(head3, style = timesNewRomanStyle,
             modifier = Modifier.weight(0.2f))
-        Text(head4, color = Color.White,
+        Text(head4, style = timesNewRomanStyle,
             modifier = Modifier.weight(0.2f))
     }
 }
@@ -298,7 +350,8 @@ fun CustomTextField(
     title: String,
     textState: String,
     onTextChange: (String) -> Unit,
-    keyboardType: KeyboardType
+    keyboardType: KeyboardType,
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = textState,
