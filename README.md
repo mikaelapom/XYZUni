@@ -1,4 +1,5 @@
 # XYZUni
+We are using the Medium Phone virtual machine for this project. 
 
 What we improved:
 
