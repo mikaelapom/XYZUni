@@ -40,6 +40,9 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+
 
 import com.maxli.coursegpa.ui.theme.CourseTheme
 
@@ -82,24 +85,38 @@ class MainActivity : ComponentActivity() {
 //initial screen setup, calls the main screen with the right data
 @Composable
 fun TopBanner() {
-    Column {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .background(Color(0xFFFBE475))
-            , contentAlignment = Alignment.Center
-        )
-        {
-            val timesNewRomanStyle = TextStyle(fontFamily = TimesNewRoman,
-            fontSize = 35.sp,
-            color = Color(0xFF1A2C57))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(Color(0xFFFBE475)),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 4.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.smith),
+                contentDescription = "Smith College Logo",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(end = 8.dp)
+            )
 
-            Text(text = "Smith College Northampton",
-                style = timesNewRomanStyle)
+            Text(
+                text = "Smith College",
+                style = TextStyle(
+                    fontFamily = TimesNewRoman,
+                    fontSize = 35.sp,
+                    color = Color(0xFF1A2C57)
+                )
+            )
         }
+
     }
 }
+
 
 @Composable
 fun SecondBanner() {
