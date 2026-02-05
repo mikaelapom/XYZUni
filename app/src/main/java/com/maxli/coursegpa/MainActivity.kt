@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//initial screen setup, calls the main screen with the right data
+//initial screen setup, calls the main screen with the correct data
 @Composable
 fun TopBanner() {
     Box(
