@@ -53,7 +53,7 @@ val TimesNewRoman = FontFamily(
 )
 
 
-//val answered = MutableList(10) {false}
+//val answered = MutableList(11) {false}
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -195,7 +195,7 @@ fun TriviaScreen(
                 if (questionIndex > 0) questionIndex--
             },
             onNext = {
-                if (questionIndex < questions.size - 1) questionIndex++
+                if (questionIndex < 9) questionIndex++
             },
             onReset = {
                 questionIndex = 0
